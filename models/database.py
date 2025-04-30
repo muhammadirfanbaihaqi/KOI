@@ -8,20 +8,26 @@ import os
 # load_dotenv()
 
 
+import streamlit as st
+import mysql.connector
+from mysql.connector import Error
+
 def create_connection():
-    """Membuat koneksi ke MySQL"""
     try:
         connection = mysql.connector.connect(
             host = st.secrets["DB_HOST"],
+            port = int(st.secrets["DB_PORT"]),
             user = st.secrets["DB_USER"],
             password = st.secrets["DB_PASSWORD"],
-            database = st.secrets["DB_NAME"],
-            port = st.secrets["DB_PORT"]
+            database = st.secrets["DB_NAME"]
         )
+        if connection.is_connected():
+            print("✅ Berhasil konek ke MySQL via Railway")
         return connection
     except Error as e:
-        st.error(f"Error connecting to MySQL: {e}")
+        st.error(f"❌ Error koneksi ke MySQL: {e}")
         return None
+
 
 # def create_connection():
 #     """Membuat koneksi ke MySQL"""
