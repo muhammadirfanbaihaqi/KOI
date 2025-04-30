@@ -8,35 +8,35 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-# def create_connection():
-#     """Membuat koneksi ke MySQL"""
-#     try:
-#         connection = mysql.connector.connect(
-#             host = st.secrets["DB_HOST"],
-#             user = st.secrets["DB_USER"],
-#             password = st.secrets["DB_PASSWORD"],
-#             database = st.secrets["DB_NAME"],
-#             port = st.secrets["DB_PORT"]
-#         )
-#         return connection
-#     except Error as e:
-#         st.error(f"Error connecting to MySQL: {e}")
-#         return None
-
 def create_connection():
     """Membuat koneksi ke MySQL"""
     try:
         connection = mysql.connector.connect(
-            host=os.getenv("DB_HOST"),
-            port=int(os.getenv("DB_PORT")),
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASSWORD"),
-            database=os.getenv("DB_NAME")
+            host = st.secrets["DB_HOST"],
+            user = st.secrets["DB_USER"],
+            password = st.secrets["DB_PASSWORD"],
+            database = st.secrets["DB_NAME"],
+            port = st.secrets["DB_PORT"]
         )
         return connection
     except Error as e:
         st.error(f"Error connecting to MySQL: {e}")
         return None
+
+# def create_connection():
+#     """Membuat koneksi ke MySQL"""
+#     try:
+#         connection = mysql.connector.connect(
+#             host=os.getenv("DB_HOST"),
+#             port=int(os.getenv("DB_PORT")),
+#             user=os.getenv("DB_USER"),
+#             password=os.getenv("DB_PASSWORD"),
+#             database=os.getenv("DB_NAME")
+#         )
+#         return connection
+#     except Error as e:
+#         st.error(f"Error connecting to MySQL: {e}")
+#         return None
     
 def insert_user(username, name, password):
     try:
