@@ -2,6 +2,10 @@ import mysql.connector
 from mysql.connector import Error
 import streamlit as st
 import streamlit_authenticator as stauth
+import os
+
+from dotenv import load_dotenv
+load_dotenv()
 
 
 # def create_connection():
@@ -23,11 +27,11 @@ def create_connection():
     """Membuat koneksi ke MySQL"""
     try:
         connection = mysql.connector.connect(
-            host = 'localhost',
-            user = 'root',
-            password = '',
-            database = 'smart_fish',
-            port = 3306
+            host=os.getenv("DB_HOST"),
+            port=int(os.getenv("DB_PORT")),
+            user=os.getenv("DB_USER"),
+            password=os.getenv("DB_PASSWORD"),
+            database=os.getenv("DB_NAME")
         )
         return connection
     except Error as e:
