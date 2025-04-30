@@ -4,8 +4,8 @@ import streamlit as st
 import streamlit_authenticator as stauth
 import os
 
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 
 
 def create_connection():
