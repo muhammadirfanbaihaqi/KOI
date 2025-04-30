@@ -11,7 +11,6 @@ import os
 import streamlit as st
 import mysql.connector
 from mysql.connector import Error
-import mysql.connector
 from urllib.parse import urlparse
 
 # Connection URL yang diberikan oleh Railway
@@ -20,14 +19,24 @@ connection_url = "mysql://root:JWWprfxEjxyJCLjIyxKnyoYfdCIjOLFT@caboose.proxy.rl
 # Mengurai URL untuk mendapatkan detail koneksi
 url = urlparse(connection_url)
 
-# Mengonfigurasi koneksi
-db_config = {
-    "host": url.hostname,
-    "user": url.username,
-    "password": url.password,
-    "database": url.path[1:],  # Mengambil nama database (tanpa '/')
-    "port": url.port
-}
+# Fungsi untuk membuat koneksi
+def create_connection():
+    try:
+        # Mengonfigurasi koneksi menggunakan parameter yang benar
+        connection = mysql.connector.connect(
+            host=url.hostname,
+            user=url.username,
+            password=url.password,
+            database=url.path[1:],  # Mengambil nama database (tanpa '/')
+            port=url.port
+        )
+        if connection.is_connected():
+            st.success("✅ Berhasil konek ke MySQL via Railway")
+        return connection
+    except Error as e:
+        st.error(f"❌ Error koneksi ke MySQL: {e}")
+        return None
+
 
 # def create_connection():
 #     try:
