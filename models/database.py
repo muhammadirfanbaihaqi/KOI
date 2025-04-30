@@ -11,22 +11,39 @@ import os
 import streamlit as st
 import mysql.connector
 from mysql.connector import Error
+import mysql.connector
+from urllib.parse import urlparse
 
-def create_connection():
-    try:
-        connection = mysql.connector.connect(
-            host = st.secrets["DB_HOST"],
-            port = int(st.secrets["DB_PORT"]),
-            user = st.secrets["DB_USER"],
-            password = st.secrets["DB_PASSWORD"],
-            database = st.secrets["DB_NAME"]
-        )
-        if connection.is_connected():
-            print("✅ Berhasil konek ke MySQL via Railway")
-        return connection
-    except Error as e:
-        st.error(f"❌ Error koneksi ke MySQL: {e}")
-        return None
+# Connection URL yang diberikan oleh Railway
+connection_url = "mysql://root:JWWprfxEjxyJCLjIyxKnyoYfdCIjOLFT@caboose.proxy.rlwy.net:30550/railway"
+
+# Mengurai URL untuk mendapatkan detail koneksi
+url = urlparse(connection_url)
+
+# Mengonfigurasi koneksi
+db_config = {
+    "host": url.hostname,
+    "user": url.username,
+    "password": url.password,
+    "database": url.path[1:],  # Mengambil nama database (tanpa '/')
+    "port": url.port
+}
+
+# def create_connection():
+#     try:
+#         connection = mysql.connector.connect(
+#             host = st.secrets["DB_HOST"],
+#             port = int(st.secrets["DB_PORT"]),
+#             user = st.secrets["DB_USER"],
+#             password = st.secrets["DB_PASSWORD"],
+#             database = st.secrets["DB_NAME"]
+#         )
+#         if connection.is_connected():
+#             print("✅ Berhasil konek ke MySQL via Railway")
+#         return connection
+#     except Error as e:
+#         st.error(f"❌ Error koneksi ke MySQL: {e}")
+#         return None
 
 
 # def create_connection():
