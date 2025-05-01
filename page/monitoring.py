@@ -1,4 +1,4 @@
-def Monitoring_page():
+def monitoring_page():
     import streamlit as st
     import requests
     from PIL import Image
