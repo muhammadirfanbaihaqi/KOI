@@ -32,8 +32,8 @@ def create_connection():
             database=url.path[1:],  # Mengambil nama database (tanpa '/')
             port=url.port
         )
-        if connection.is_connected():
-            st.success("✅ Berhasil konek ke MySQL via Railway")
+        # if connection.is_connected():
+        #     st.success("✅ Berhasil konek ke MySQL via Railway")
         return connection
     except Error as e:
         st.error(f"❌ Error koneksi ke MySQL: {e}")
