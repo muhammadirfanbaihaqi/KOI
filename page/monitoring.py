@@ -129,7 +129,7 @@ def monitoring_page():
                 num_fish = len(results[0].boxes)
 
                 st.success(f"✅ Deteksi selesai! Jumlah ikan terdeteksi: {num_fish}")
-                st.image(result_img, caption=f"Hasil Deteksi: {num_fish} ikan", use_column_width=True)
+                st.image(result_img, caption=f"Hasil Deteksi: {num_fish} ikan", use_container_width=True)
 
             else:
                 st.error("❌ Gagal mengambil gambar dari ESP32-CAM.")
