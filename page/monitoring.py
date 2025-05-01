@@ -7,8 +7,8 @@ from io import BytesIO
 def monitoring_page():
     # ================ ISI HALAMAN ================
 
-    ESP32_SNAPSHOT_URL = "http://192.168.42.43/capture"
-    ESP32_STREAM_URL = "http://192.168.42.43:81/stream"
+    ESP32_SNAPSHOT_URL = "http://192.168.25.43/capture"
+    ESP32_STREAM_URL = "http://192.168.25.43:81/stream"
     FLASK_API_URL = "https://flask-koi-production.up.railway.app/detect"  # URL API Flask
 
     st.markdown(
