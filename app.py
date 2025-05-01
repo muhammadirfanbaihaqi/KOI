@@ -35,14 +35,6 @@ from page.chatbot import chatbot_page
 # # Tampilan Login
 # authentication_status, username = authenticator.login("Login", "main")
 
-# if authentication_status is False:
-#     st.error("Username atau password salah")
-    
-# if authentication_status is None:
-#     st.warning("Masukkan username dan password")
-    
-# if authentication_status:
-#     authenticator.logout("Logout", "sidebar")
 # Hindari streamlit mencoba "watch" torch.classes
 sys.modules['torch.classes'] = types.ModuleType('torch.classes')
 sys.modules['torch.classes'].__path__ = []
@@ -51,30 +43,51 @@ sys.modules['torch.classes'].__path__ = []
 st.set_page_config(page_title="Smart Fish Dashboard", layout="wide")
 
 # Ambil semua users dari database
+# users = ambil_semua_users()
+
+# # Ubah list users ke format dictionary yang sesuai untuk streamlit_authenticator
+# credentials = {
+#     "usernames": {
+#         user['key']: {
+#             "name": user['name'],
+#             "password": user['password']  # Pastikan password ini sudah di-hash!
+#         }
+#         for user in users
+#     }
+# }
+
+# # Buat objek authenticator
+# authenticator = stauth.Authenticate(
+#     credentials,
+#     'smart_fish_dashboard',  # cookie_name
+#     'abcdef',                # signature_key
+#     cookie_expiry_days=30
+# )
+
+# # Tampilan Login
+# # name, authentication_status, username = authenticator.login("Login", "main")
+# name, authentication_status, username = authenticator.login("Login")  # default di "main"
+
+# Ambil semua users dari database
 users = ambil_semua_users()
+usernames = [user['key'] for user in users]
+names = [user['name'] for user in users]
+passwords = [user['password'] for user in users]
 
-# Ubah list users ke format dictionary yang sesuai untuk streamlit_authenticator
-credentials = {
-    "usernames": {
-        user['key']: {
-            "name": user['name'],
-            "password": user['password']  # Pastikan password ini sudah di-hash!
-        }
-        for user in users
-    }
-}
-
-# Buat objek authenticator
+# Buat objek authenticator dengan username, name, dan password list
 authenticator = stauth.Authenticate(
-    credentials,
+    names,  # List nama pengguna
+    usernames,  # List username
+    passwords,  # List password (pastikan sudah di-hash!)
     'smart_fish_dashboard',  # cookie_name
     'abcdef',                # signature_key
-    cookie_expiry_days=30
+    cookie_expiry_days=30    # masa berlaku cookie
 )
 
 # Tampilan Login
-# name, authentication_status, username = authenticator.login("Login", "main")
-name, authentication_status, username = authenticator.login("Login","main")
+name, authentication_status, username = authenticator.login("Login")  # default di "main"
+
+
 
 
 

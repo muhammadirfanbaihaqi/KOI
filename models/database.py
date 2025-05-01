@@ -123,7 +123,7 @@ def ambil_semua_users():
             conn.close()
         
         
-        
+# SEED USER
 if __name__ == "__main__":
     names = 'ipan'
     usernames = 'ipan'
