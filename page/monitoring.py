@@ -32,14 +32,27 @@ def monitoring_page():
     st.title("📷 Live Stream dari ESP32-CAM")
     st.markdown("Berikut ini adalah tampilan kamera secara langsung dari ESP32-CAM:")
 
-    st.markdown(
-        f"""
-        <div style="text-align: center;">
-            <img src="{ESP32_STREAM_URL}" width="640" height="480" />
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+    import time
+
+    frame_placeholder = st.empty()
+
+    if st.button("▶️ Mulai Stream"):
+        st.info("Streaming dimulai. Tekan Stop Stream untuk berhenti.")
+        stop = st.button("⏹️ Stop Stream")
+
+        while not stop:
+            try:
+                # Ambil snapshot dari ESP32-CAM
+                response = requests.get(ESP32_SNAPSHOT_URL, timeout=5)
+                if response.status_code == 200:
+                    img = Image.open(BytesIO(response.content)).convert("RGB")
+                    frame_placeholder.image(img, caption="Live Stream dari ESP32-CAM", use_column_width=True)
+                else:
+                    frame_placeholder.error("Gagal mengambil snapshot dari kamera.")
+            except Exception as e:
+                frame_placeholder.error(f"Terjadi error: {e}")
+            time.sleep(1)  # jeda 1 detik antar snapshot
+
 
     st.markdown("---")
 
