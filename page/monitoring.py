@@ -106,7 +106,7 @@ def monitoring_page():
             # Tampilkan frame ke Streamlit
             frame_placeholder.image(frame, channels="BGR", use_column_width=True)
 
-            time.sleep(0.05)  # Sekitar 20 fps
+            time.sleep(0.2)  # Sekitar 20 fps
 
         cap.release()
 
