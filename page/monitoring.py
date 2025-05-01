@@ -7,8 +7,8 @@ def monitoring_page():
     from io import BytesIO
     from ultralytics import YOLO
 
-    ESP32_SNAPSHOT_URL = "http://192.168.25.43/capture"
-    ESP32_STREAM_URL = "http://192.168.25.43:81/stream"
+    ESP32_SNAPSHOT_URL = "https://041f-114-10-150-29.ngrok-free.app/capture"
+    ESP32_STREAM_URL = " https://bdd6-114-10-150-29.ngrok-free.app/stream"
 
     st.markdown(
         """
