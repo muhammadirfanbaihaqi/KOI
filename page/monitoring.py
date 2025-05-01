@@ -8,8 +8,8 @@ def monitoring_page():
     from ultralytics import YOLO
     import time
 
-    ESP32_SNAPSHOT_URL = "https://bdd6-114-10-150-29.ngrok-free.app/capture"
-    ESP32_STREAM_URL = "https://bdd6-114-10-150-29.ngrok-free.app/stream"
+    ESP32_SNAPSHOT_URL = "https://722b-114-10-150-29.ngrok-free.app/capture"
+    ESP32_STREAM_URL = "https://722b-114-10-150-29.ngrok-free.app/stream"
 
     st.title("📷 Live Stream dari ESP32-CAM")
     st.markdown("Berikut ini adalah tampilan kamera secara langsung dari ESP32-CAM:")
