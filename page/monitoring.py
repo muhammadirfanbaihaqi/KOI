@@ -1,16 +1,15 @@
-
 import streamlit as st
 import requests
 from PIL import Image
 from io import BytesIO
+import time
 
 def monitoring_page():
-    # ================ ISI HALAMAN ================
-
+    # ================ KONFIGURASI URL ================
     ESP32_SNAPSHOT_URL = "http://192.168.25.43/capture"
-    ESP32_STREAM_URL = "http://192.168.25.43:81/stream"
-    FLASK_API_URL = "https://flask-koi-production.up.railway.app/detect"  # URL API Flask
+    FLASK_API_URL = "https://flask-koi-production.up.railway.app/detect"
 
+    # ================ STYLE CSS ================
     st.markdown(
         """
         <style>
@@ -29,43 +28,46 @@ def monitoring_page():
         unsafe_allow_html=True
     )
 
-    st.title("📷 Live Stream dari ESP32-CAM")
-    st.markdown("Berikut ini adalah tampilan kamera secara langsung dari ESP32-CAM:")
+    # ================ JUDUL & KONTEN ================
+    st.title("📷 Monitoring Kamera ESP32-CAM")
+    st.markdown("Klik tombol di bawah ini untuk menampilkan live snapshot dari ESP32-CAM:")
 
-    import time
+    # Tempat untuk menampilkan frame dan hasil deteksi
+    stream_placeholder = st.empty()
+    result_placeholder = st.empty()
 
-    frame_placeholder = st.empty()
-
+    # ================ LOGIKA STREAM ================
     if st.button("▶️ Mulai Stream"):
-        st.info("Streaming dimulai. Tekan Stop Stream untuk berhenti.")
-        stop = st.button("⏹️ Stop Stream")
+        st.info("Streaming dimulai. Klik 'Stop Stream' di sidebar untuk menghentikan.")
+        stop_stream = st.sidebar.button("⏹️ Stop Stream")
 
-        while not stop:
+        while not stop_stream:
             try:
-                # Ambil snapshot dari ESP32-CAM
                 response = requests.get(ESP32_SNAPSHOT_URL, timeout=5)
                 if response.status_code == 200:
                     img = Image.open(BytesIO(response.content)).convert("RGB")
-                    frame_placeholder.image(img, caption="Live Stream dari ESP32-CAM", use_column_width=True)
+                    stream_placeholder.image(img, caption="Live Stream ESP32-CAM", use_column_width=True)
                 else:
-                    frame_placeholder.error("Gagal mengambil snapshot dari kamera.")
+                    stream_placeholder.error("❌ Gagal mengambil snapshot dari kamera.")
             except Exception as e:
-                frame_placeholder.error(f"Terjadi error: {e}")
-            time.sleep(1)  # jeda 1 detik antar snapshot
-
+                stream_placeholder.error(f"⚠️ Terjadi error: {e}")
+            time.sleep(1)
 
     st.markdown("---")
+    st.subheader("📸 Deteksi Ikan Koi")
 
+    # ================ DETEKSI GAMBAR ================
     if st.button("📸 Ambil Gambar & Deteksi Ikan"):
         try:
             st.info("Mengambil gambar dari kamera...")
             response = requests.get(ESP32_SNAPSHOT_URL, timeout=5)
 
             if response.status_code == 200:
-                # Baca image langsung dari bytes
+                # Ambil gambar dari kamera
                 image = Image.open(BytesIO(response.content)).convert("RGB")
+                stream_placeholder.image(image, caption="Gambar Snapshot", use_column_width=True)
 
-                # Mengirim gambar ke Flask API
+                # Kirim ke Flask API
                 files = {'image': response.content}
                 response_api = requests.post(FLASK_API_URL, files=files)
 
@@ -73,25 +75,19 @@ def monitoring_page():
                     result = response_api.json()
 
                     if "error" in result:
-                        st.error(f"❌ Error: {result['error']}")
+                        result_placeholder.error(f"❌ Error dari API: {result['error']}")
                     else:
-                        # Menampilkan jumlah ikan
                         num_fish = result["num_fish"]
-                        st.success(f"✅ Deteksi selesai! Jumlah ikan terdeteksi: {num_fish}")
-
-                        # Mengubah image dari hex string kembali ke byte
                         result_img_bytes = bytes.fromhex(result["image"])
 
-                        # Menampilkan gambar hasil deteksi
-                        st.image(result_img_bytes, caption=f"Hasil Deteksi Ikan: {num_fish} ikan", use_column_width=True)
+                        result_placeholder.success(f"✅ Deteksi selesai! Jumlah ikan terdeteksi: {num_fish}")
+                        result_placeholder.image(result_img_bytes, caption=f"Hasil Deteksi: {num_fish} ikan koi", use_column_width=True)
 
                 else:
-                    st.error("❌ Gagal menerima hasil dari API Flask.")
+                    result_placeholder.error("❌ Gagal menerima hasil dari API Flask.")
 
             else:
-                st.error("❌ Gagal mengambil gambar dari ESP32-CAM.")
+                result_placeholder.error("❌ Gagal mengambil gambar dari ESP32-CAM.")
 
         except Exception as e:
-            st.error(f"⚠️ Terjadi error saat mengambil gambar atau memproses deteksi: {e}")
-
-
+            result_placeholder.error(f"⚠️ Terjadi error saat proses deteksi: {e}")
