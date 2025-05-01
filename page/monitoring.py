@@ -64,7 +64,7 @@
 #                 num_fish = len(results[0].boxes)
 
 #                 st.success(f"✅ Deteksi selesai! Jumlah ikan terdeteksi: {num_fish}")
-#                 st.image(result_img, caption=f"Hasil Deteksi Ikan: {num_fish} ikan", use_column_width=True)
+#                 st.image(result_img, caption=f"Hasil Deteksi Ikan: {num_fish} ikan", use_container_width=True)
 
 #             else:
 #                 st.error("❌ Gagal mengambil gambar dari ESP32-CAM.")
@@ -104,7 +104,7 @@ def monitoring_page():
                 break
 
             # Tampilkan frame ke Streamlit
-            frame_placeholder.image(frame, channels="BGR", use_column_width=True)
+            frame_placeholder.image(frame, channels="BGR", use_container_width=True)
 
             time.sleep(0.2)  # Sekitar 20 fps
 
