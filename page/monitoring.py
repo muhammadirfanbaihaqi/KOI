@@ -106,7 +106,7 @@ def monitoring_page():
     if st.button("📸 Ambil Gambar & Deteksi Ikan"):
         try:
             st.info("Mengambil gambar dari kamera...")
-            response = requests.get(ESP32_SNAPSHOT_URL, timeout=5)
+            response = requests.get(ESP32_SNAPSHOT_URL, timeout=10)
 
             if response.status_code == 200:
                 # Baca image langsung dari bytes
