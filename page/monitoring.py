@@ -73,7 +73,7 @@ def monitoring_page():
     from ultralytics import YOLO
     import time
 
-    ESP32_SNAPSHOT_URL = "https://bb53-114-10-152-51.ngrok-free.app/capture"
+    ESP32_SNAPSHOT_URL = "https://6504-114-10-152-51.ngrok-free.app/capture"
 
     st.title("📷 Pseudo Stream dari ESP32-CAM (Stable Mode)")
     st.markdown("Streaming stabil via snapshot setiap detik (tanpa MJPEG).")
