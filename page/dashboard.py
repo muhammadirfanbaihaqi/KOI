@@ -97,7 +97,8 @@ def pemantauan_page():
                 return
 
             df = pd.DataFrame(records)
-            df['timestamp'] = pd.to_datetime(df['timestamp'])
+            # df['timestamp'] = pd.to_datetime(df['timestamp'])
+            df['timestamp'] = pd.to_datetime(df['timestamp']).dt.tz_localize('UTC').dt.tz_convert('Asia/Jakarta')
             df = df.rename(columns={"timestamp": "Waktu", "suhu": "Suhu", "pakan(%)": "Pakan", "pH": "pH", "pompa": "Pompa"})
             df = df.set_index("Waktu")
         else:
