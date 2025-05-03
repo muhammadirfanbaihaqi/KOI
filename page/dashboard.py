@@ -25,7 +25,10 @@ def pemantauan_page():
             timestamp = data.get("timestamp", "N/A")
             # Konversi timestamp ke datetime dan ke zona waktu Asia/Jakarta (WIB)
             if timestamp != "N/A":
-                timestamp = pd.to_datetime(timestamp, utc=True).dt.tz_convert('Asia/Jakarta').strftime('%Y-%m-%d %H:%M:%S')
+                # Konversi timestamp yang masih berupa string menjadi datetime
+                timestamp = pd.to_datetime(timestamp, utc=True)
+                # Konversi ke zona waktu Asia/Jakarta (WIB)
+                timestamp = timestamp.tz_convert('Asia/Jakarta').strftime('%Y-%m-%d %H:%M:%S')
             else:
                 timestamp = "N/A"
         else:
