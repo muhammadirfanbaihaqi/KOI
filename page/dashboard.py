@@ -21,7 +21,7 @@ def pemantauan_page():
             suhu = data.get("suhu", "N/A")
             pakan = data.get("pakan(%)", "N/A")
             pompa = data.get("pompa", False)
-            pH = data.get("pH", "N/A")
+            ph = data.get("ph", "N/A")
             timestamp = data.get("timestamp", "N/A")
         else:
             st.error("❌ Gagal mengambil data dari server Flask.")
@@ -53,7 +53,7 @@ def pemantauan_page():
     with cols[3]:
         st.markdown(buat_metric_card(
             "https://cdn-icons-png.flaticon.com/128/15359/15359371.png",
-            "pH", f"{pH}/14"), unsafe_allow_html=True)
+            "ph", f"{ph}/14"), unsafe_allow_html=True)
 
     with cols2[0]:
         st.markdown(buat_metric_card(
@@ -65,7 +65,7 @@ def pemantauan_page():
         with st.spinner("Sedang memproses saran dari AI..."):
             history = [
                 {"role": "system", "content": "Kamu adalah asisten pintar untuk peternakan ikan."},
-                {"role": "user", "content": f"Suhu air saat ini adalah {suhu}°C, pH saat ini adalah {pH}, dan status aerator backup adalah {'aktif' if pompa else 'mati'}. Berikan saran agar ikan koi dapat sehat berdasarkan data tersebut."}
+                {"role": "user", "content": f"Suhu air saat ini adalah {suhu}°C, ph saat ini adalah {ph}, dan status aerator backup adalah {'aktif' if pompa else 'mati'}. Berikan saran agar ikan koi dapat sehat berdasarkan data tersebut."}
             ]
             saran = chatAI(history)
             st.success("🤖 Saran dari AI:")
@@ -104,7 +104,7 @@ def pemantauan_page():
             # df['timestamp'] = pd.to_datetime(df['timestamp'])
             df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True)  # asumsikan dari Mongo adalah UTC
             df['timestamp'] = df['timestamp'].dt.tz_convert('Asia/Jakarta')  # ubah ke WIB
-            df = df.rename(columns={"timestamp": "Waktu", "suhu": "Suhu", "pakan(%)": "Pakan", "pH": "pH", "pompa": "Pompa"})
+            df = df.rename(columns={"timestamp": "Waktu", "suhu": "Suhu", "pakan(%)": "Pakan", "ph": "ph", "pompa": "Pompa"})
             df = df.set_index("Waktu")
         else:
             st.error("❌ Gagal mengambil data historis dari Flask.")
@@ -125,7 +125,7 @@ def pemantauan_page():
 
     tampil_ringkasan_statistik(df, 'Suhu', '🌡️ Suhu', '°C')
     tampil_ringkasan_statistik(df, 'Pakan', '🐟 Pakan', '%')
-    tampil_ringkasan_statistik(df, 'pH', '⚗️ pH', '')
+    tampil_ringkasan_statistik(df, 'ph', '⚗️ ph', '')
 
     st.markdown("#### 💧 Pompa")
     cols = st.columns(2)
@@ -136,7 +136,7 @@ def pemantauan_page():
     # Grafik
     buat_grafik(df, 'Suhu', f'Grafik Suhu Air {start_date.strftime("%d %b")} - {end_date.strftime("%d %b")}', '°C')
     buat_grafik(df, 'Pakan', f'Grafik Pakan {start_date.strftime("%d %b")} - {end_date.strftime("%d %b")}', '%')
-    buat_grafik(df, 'pH', f'Grafik pH {start_date.strftime("%d %b")} - {end_date.strftime("%d %b")}', '')
+    buat_grafik(df, 'ph', f'Grafik ph {start_date.strftime("%d %b")} - {end_date.strftime("%d %b")}', '')
 
     st.markdown('---')
     st.subheader("📈 Grafik Pompa")
