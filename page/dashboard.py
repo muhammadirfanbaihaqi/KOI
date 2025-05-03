@@ -108,11 +108,22 @@ def pemantauan_page():
             for rec in records:
                 if isinstance(rec.get("timestamp"), dict) and "$date" in rec["timestamp"]:
                     rec["timestamp"] = rec["timestamp"]["$date"]
+            # df = pd.DataFrame(records)
+            # # df['timestamp'] = pd.to_datetime(df['timestamp'])
+            # df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True)  # asumsikan dari Mongo adalah UTC
+            # df['timestamp'] = df['timestamp'].dt.tz_convert('Asia/Jakarta')  # ubah ke WIB
+            # df = df.rename(columns={"timestamp": "Waktu", "suhu": "Suhu", "pakan(%)": "Pakan", "ph": "ph", "pompa": "Pompa"})
+            # df = df.set_index("Waktu")
             df = pd.DataFrame(records)
-            # df['timestamp'] = pd.to_datetime(df['timestamp'])
-            df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True)  # asumsikan dari Mongo adalah UTC
-            df['timestamp'] = df['timestamp'].dt.tz_convert('Asia/Jakarta')  # ubah ke WIB
-            df = df.rename(columns={"timestamp": "Waktu", "suhu": "Suhu", "pakan(%)": "Pakan", "ph": "ph", "pompa": "Pompa"})
+            df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True)
+            df['timestamp'] = df['timestamp'].dt.tz_convert('Asia/Jakarta')
+            df = df.rename(columns={
+                "timestamp": "Waktu",
+                "suhu": "Suhu",
+                "pakan(%)": "Pakan",
+                "ph": "ph",
+                "pompa": "Pompa"
+            })
             df = df.set_index("Waktu")
         else:
             st.error("❌ Gagal mengambil data historis dari Flask.")
