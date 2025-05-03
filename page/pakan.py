@@ -10,7 +10,7 @@ def pakan_page():
 
     banyak_bukaan = st.number_input("Jumlah Bukaan Pakan", min_value=1, max_value=30, step=1, value=3)
     if st.button("Kirim"):
-        response = requests.post("https://your-flask-api/set-jumlah-bukaan", json={"jumlah_bukaan": banyak_bukaan})
+        response = requests.post("https://flask-koi-production.up.railway.app/set-jumlah-bukaan", json={"jumlah_bukaan": banyak_bukaan})
     if response.ok:
         st.success(f"Berhasil dikirim: {banyak_bukaan}x buka-tutup")
     else:
