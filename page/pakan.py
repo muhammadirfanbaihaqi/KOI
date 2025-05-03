@@ -20,6 +20,18 @@ def pakan_page():
         except Exception as e:
             st.error(f"⚠️ Error saat mengirim: {e}")
 
+        # ======== TAMPILKAN JUMLAH BUKAAN SAAT INI ========
+    try:
+        response = requests.get("https://flask-koi-production.up.railway.app/get-jumlah-bukaan")
+        if response.ok:
+            data = response.json()
+            current_bukaan = data.get("jumlah_bukaan", "Tidak diketahui")
+            st.info(f"🔁 Jumlah bukaan servo saat ini: {current_bukaan}x buka-tutup")
+        else:
+            st.warning("⚠️ Gagal mengambil jumlah bukaan saat ini.")
+    except Exception as e:
+        st.warning(f"⚠️ Tidak bisa mengambil jumlah bukaan: {e}")
+
     st.markdown("---")
 
     # ======== JADWAL PAKAN ========
