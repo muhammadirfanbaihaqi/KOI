@@ -1,26 +1,30 @@
 import streamlit as st
 import requests
 
-
 def pakan_page():
-    # ================ ISI HALAMAN ================
-
-    # Judul halaman
     st.title("📅 Atur Jadwal Pakan Ikan Hias")
 
+    # ======== SET JUMLAH BUKAAN SERVO ========
     banyak_bukaan = st.number_input("Jumlah Bukaan Pakan", min_value=1, max_value=30, step=1, value=3)
+
     if st.button("Kirim"):
-        response = requests.post("https://flask-koi-production.up.railway.app/set-jumlah-bukaan", json={"jumlah_bukaan": banyak_bukaan})
-    if response.ok:
-        st.success(f"Berhasil dikirim: {banyak_bukaan}x buka-tutup")
-    else:
-        st.error("Gagal mengirim.")
+        try:
+            response = requests.post(
+                "https://flask-koi-production.up.railway.app/set-jumlah-bukaan",
+                json={"jumlah_bukaan": banyak_bukaan}
+            )
+            if response.ok:
+                st.success(f"✅ Berhasil dikirim: {banyak_bukaan}x buka-tutup")
+            else:
+                st.error("❌ Gagal mengirim data ke server.")
+        except Exception as e:
+            st.error(f"⚠️ Error saat mengirim: {e}")
 
+    st.markdown("---")
 
-    # URL API FLASK
-    API_URL = "https://flask-koi-production.up.railway.app/jadwal_pakan"  # Ganti sesuai IP Flask kamu
+    # ======== JADWAL PAKAN ========
+    API_URL = "https://flask-koi-production.up.railway.app/jadwal_pakan"
 
-    # Input jam dan menit untuk mengatur jadwal pakan
     jam = st.number_input("Jam", min_value=0, max_value=23, step=1)
     menit = st.number_input("Menit", min_value=0, max_value=59, step=1)
 
@@ -30,7 +34,6 @@ def pakan_page():
             if response.status_code == 200:
                 data = response.json()
                 jadwal = data.get("jadwal", [])
-
                 if [jam, menit] not in jadwal:
                     jadwal.append([jam, menit])
                     res = requests.post(API_URL, json={"jadwal": jadwal})
@@ -41,7 +44,7 @@ def pakan_page():
                 else:
                     st.info("ℹ️ Jadwal ini sudah ada.")
             else:
-                st.error(f"{response.status_code}")
+                st.error(f"⚠️ Gagal mengambil jadwal: {response.status_code}")
         except Exception as e:
             st.error(f"⚠️ Gagal terhubung ke server: {e}")
 
@@ -60,7 +63,6 @@ def pakan_page():
                         st.write(f"- {j:02d}:{m:02d}")
                     with col2:
                         if st.button("❌ Hapus", key=f"hapus_{idx}"):
-
                             jadwal.remove([j, m])
                             res = requests.post(API_URL, json={"jadwal": jadwal})
                             if res.status_code == 200:
@@ -69,7 +71,7 @@ def pakan_page():
                             else:
                                 st.error("❌ Gagal menghapus jadwal.")
             else:
-                st.write("Belum ada jadwal.")
+                st.info("Belum ada jadwal.")
         else:
             st.warning(f"⚠️ Gagal mengambil jadwal: {response.status_code}")
     except Exception as e:
