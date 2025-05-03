@@ -96,6 +96,10 @@ def pemantauan_page():
                 st.warning("⚠️ Tidak ada data dalam rentang waktu yang dipilih.")
                 return
 
+            # ⛑️ Cek & ubah jika timestamp masih dalam bentuk dict
+            for rec in records:
+                if isinstance(rec.get("timestamp"), dict) and "$date" in rec["timestamp"]:
+                    rec["timestamp"] = rec["timestamp"]["$date"]
             df = pd.DataFrame(records)
             # df['timestamp'] = pd.to_datetime(df['timestamp'])
             df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True)  # asumsikan dari Mongo adalah UTC
