@@ -23,6 +23,11 @@ def pemantauan_page():
             pompa = data.get("pompa", False)
             ph = data.get("ph", "N/A")
             timestamp = data.get("timestamp", "N/A")
+            # Konversi timestamp ke datetime dan ke zona waktu Asia/Jakarta (WIB)
+            if timestamp != "N/A":
+                timestamp = pd.to_datetime(timestamp, utc=True).dt.tz_convert('Asia/Jakarta').strftime('%Y-%m-%d %H:%M:%S')
+            else:
+                timestamp = "N/A"
         else:
             st.error("❌ Gagal mengambil data dari server Flask.")
             return
