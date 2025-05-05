@@ -73,7 +73,7 @@ def monitoring_page():
     from ultralytics import YOLO
     import time
 
-    ESP32_SNAPSHOT_URL = "http://192.168.24.43/capture"
+    ESP32_SNAPSHOT_URL = "http://192.168.137.252/capture"
 
     st.title("📷 Pseudo Stream dari ESP32-CAM (Stable Mode)")
     st.markdown("Streaming stabil via snapshot setiap detik (tanpa MJPEG).")
