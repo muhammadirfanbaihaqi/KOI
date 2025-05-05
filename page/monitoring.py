@@ -78,7 +78,7 @@ def monitoring_page():
     st.title("📷 Pseudo Stream dari ESP32-CAM (Stable Mode)")
     st.markdown("Streaming stabil via snapshot setiap detik (tanpa MJPEG).")
 
-    frame_rate = st.slider("Frame per detik", 1, 30, 1)
+    frame_rate = st.slider("Frame per detik", 1, 100, 1)
     placeholder = st.empty()
 
     if st.button("▶️ Mulai Pseudo Stream"):
